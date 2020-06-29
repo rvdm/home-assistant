@@ -1,5 +1,5 @@
-# rvdm's Home Assistant Configuration Files 
-![Project Maintenance][maintenance-shield] [![License][license-shield]](docs/LICENSE.md) [![GitHub Activity][commits-shield]][commits] [![GitHub Last Commit][last-commit-shield]][commits]
+# rvdm's Home Assistant Configuration Files
+![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg) ![GitHub Activity](https://img.shields.io/github/last-commit/rvdm/home-assistant.svg)
 
 
 # Physical Setup
