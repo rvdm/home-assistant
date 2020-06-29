@@ -1,0 +1,149 @@
+default_config:
+        
+homeassistant:
+  customize: !include customize.yaml
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+# Text to speech
+tts:
+  - platform: google_translate
+    language: 'nl'
+
+recorder:
+  purge_keep_days: 15
+  db_url: !secret recorder_db_url
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+notify:
+    - platform: html5
+      name: home_assistant_notifier
+      vapid_pub_key: !secret notify_vapid_pub_key
+      vapid_prv_key: !secret notify_vapid_prv_key
+      vapid_email: !secret notify_vapid_email
+
+breaking_changes:
+
+toon:
+  client_id: !secret toon_client_id
+  client_secret: !secret toon_client_secret
+
+homekit:
+  auto_start: false
+  advertise_ip: !secret hassio_host_ip
+  filter:
+    include_entities:
+      - switch.raam_lamp_52
+      - switch.espresso_machine_53
+      - scene.a_v_off
+      - scene.a_v_on
+      - climate.toon_thermostat
+
+bmw_connected_drive:
+  name:
+    username: !secret bmw_username
+    password: !secret bmw_password
+    region: "rest_of_world"
+
+influxdb:
+  host: localhost
+  port: 8086
+  database: homeassistant
+  username: !secret influx_username
+  password: !secret influx_password
+  max_retries: 3
+  default_measurement: state
+
+sensor:
+  - platform: template
+    sensors:
+       toon_temperature:
+         friendly_name: "Toon Temperature"
+         unit_of_measurement: 'degrees'
+         value_template: "{{ state_attr('climate.toon_thermostat', 'current_temperature') }}"
+       espressomachine_power:
+         friendly_name: "Espresso machine power"
+         unit_of_measurement: 'watts'
+         value_template: "{{ state_attr('switch.espresso_machine_53', 'current_power_w') }}"
+       purifier_fan_mode:
+         friendly_name: "Mode"
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.mode }}"
+       purifier_fan_speed:
+         friendly_name: "Motor speed"
+         unit_of_measurement: 'rpm'
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.motor_speed }}"
+       purifier_temperature:
+         friendly_name: "Temperature"
+         unit_of_measurement: 'C°'
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.temperature }}"
+       purifier_humidity:
+         friendly_name: "Humidity"
+         unit_of_measurement: '%'
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.humidity }}"
+       purifier_child_lock:
+         friendly_name: "Child Lock"
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.child_lock }}"
+       purifier_buzzer:
+         friendly_name: "Buzzer"
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.buzzer }}"
+       purifier_target_humidity:
+         friendly_name: "Target Humidity"
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.target_humidity }}"
+       purifier_depth:
+         friendly_name: "Depth"
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.depth }}"
+       purifier_dry:
+         friendly_name: "Dry"
+         value_template: "{{ states.fan.xiaomi_miio_device.attributes.dry }}"
+  - platform: mqtt
+    state_topic: 'monitor/presence_monitor/rvdm_iphone'
+    value_template: '{{ value_json.confidence }}'
+    unit_of_measurement: '%'
+    name: 'presence_rvdm_iphone'
+  - platform: mqtt
+    state_topic: 'monitor/presence_monitor/tomomi_iphone'
+    value_template: '{{ value_json.confidence }}'
+    unit_of_measurement: '%'
+    name: 'presence_tomomi_iphone'
+  - platform: min_max
+    name: "Home Occupancy Confidence"
+    type: max
+    round_digits: 0
+    entity_ids:
+      - sensor.presence_rvdm_iphone
+      - sensor.presence_tomomi_iphone
+  - platform: template
+    sensors:
+      dishwasher_progress_non0:
+        friendly_name: Dishwasher program progress
+        unit_of_measurement: "%"
+        value_template: >-
+          {% if states("sensor.nekodishwasher_program_progress") in ['unknown', 'unavailable', 'none']  %}
+            0
+          {% else %}
+            {{ states("sensor.nekodishwasher_program_progress") }}
+          {% endif %}
+
+home_connect:
+   client_id: !secret home_connect_client_id
+   client_secret: !secret home_connect_client_secret
+
+#media_player:
+#  - platform: onkyo
+#    host: !secret onkyo_ip
+#    name: onkyo
+
+fan:
+  - platform: xiaomi_miio
+    host: !secret xiaomi_humidifier_ip
+    token: !secret xiaomi_humidifier_token
+
+sonos:
+  media_player:
+    hosts:
+      - !secret sonos_ip

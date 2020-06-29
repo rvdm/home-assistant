@@ -1,0 +1,21 @@
+- id: '1593259122642'
+  name: A/V on (ha version)
+  entities:
+    switch.audio_1_ps3_16:
+      Vera Device Id: 16
+      current_energy_kwh: 30.4494
+      current_power_w: 389
+      friendly_name: Playstation 4
+      state: 'on'
+    switch.audio_1_subwoofer_14:
+      Vera Device Id: 14
+      current_energy_kwh: 14.593
+      current_power_w: 202.2
+      friendly_name: Subwoofer
+      state: 'on'
+    switch.audio_1_tv_11:
+      Vera Device Id: 11
+      current_energy_kwh: 206.5753
+      current_power_w: 3.6
+      friendly_name: TV
+      state: 'on'

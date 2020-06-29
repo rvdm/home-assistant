@@ -1,0 +1,238 @@
+- id: '1578097773726'
+  alias: tradfri round button on/off
+  description: ''
+  trigger:
+  - event_data:
+      event: 1002
+      id: remote_button
+    event_type: deconz_event
+    platform: event
+  condition: []
+  action:
+  - entity_id: switch.wall_plug_at_desk_25
+    service: switch.toggle
+- id: '1578143746974'
+  alias: Start HomeKit
+  description: ''
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - delay: 0:05
+  - service: homekit.start
+- id: '1578143746975'
+  alias: tradfri_square_1 bed_lamp_1
+  description: ''
+  trigger:
+  - event_data:
+      event: 1002
+      id: tradfri_on_off_switch
+    event_type: deconz_event
+    platform: event
+  condition: []
+  action:
+  - entity_id: scene.toggle_bed_light_1
+    service: scene.turn_on
+- id: '1578143746976'
+  alias: tradfri_square_1 bed_lamp_2
+  description: ''
+  trigger:
+  - event_data:
+      event: 2002
+      id: tradfri_on_off_switch
+    event_type: deconz_event
+    platform: event
+  condition: []
+  action:
+  - entity_id: scene.toggle_bed_light_2
+    service: scene.turn_on
+- id: '1578143746977'
+  alias: tradfri_square_2 bed_lamp_1
+  description: ''
+  trigger:
+  - event_data:
+      event: 1002
+      id: tradfri_on_off_switch_2
+    event_type: deconz_event
+    platform: event
+  condition: []
+  action:
+  - entity_id: scene.toggle_bed_light_1
+    service: scene.turn_on
+- id: '1578143746978'
+  alias: tradfri_square_2 bed_lamp_2
+  description: ''
+  trigger:
+  - event_data:
+      event: 2002
+      id: tradfri_on_off_switch_2
+    event_type: deconz_event
+    platform: event
+  condition: []
+  action:
+  - entity_id: scene.toggle_bed_light_2
+    service: scene.turn_on
+- id: '1578143746979'
+  alias: update_toon_temperature_sensor
+  description: trigger every 5 mins to update temp graphs
+  trigger:
+  - platform: time_pattern
+    minutes: /10
+  action:
+  - service: homeassistant.update_entity
+    entity_id: climate.toon_thermostat
+- id: '1592241024392'
+  alias: fridge door open long
+  description: ''
+  trigger:
+  - device_id: 520b4c30d32e41269bc03fa52651512c
+    domain: binary_sensor
+    entity_id: binary_sensor.fridge_freezer_door
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 20
+    platform: device
+    type: opened
+  condition: []
+  action:
+  - data:
+      delay: 00:00:05
+      message: De koelkast staat nog open!
+      sonos_entity: media_player.beneden
+      volume: 0.5
+    service: script.sonos_say
+- id: '1592584947804'
+  alias: rvdm home
+  description: ''
+  trigger:
+  - above: '10'
+    entity_id: sensor.presence_rvdm_iphone
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      dev_id: rvdm_monitor
+      location_name: home
+      source_type: bluetooth
+    service: device_tracker.see
+- id: '1592585071436'
+  alias: rvdm not_home
+  description: ''
+  trigger:
+  - below: '10'
+    entity_id: sensor.presence_rvdm_iphone
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      dev_id: rvdm_monitor
+      location_name: not_home
+      source_type: bluetooth
+    service: device_tracker.see
+- id: '1592585112814'
+  alias: tomomi_not_home
+  description: ''
+  trigger:
+  - below: '10'
+    entity_id: sensor.presence_tomomi_iphone
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      dev_id: tomomi_monitor
+      location_name: not_home
+      source_type: bluetooth
+    service: device_tracker.see
+- id: '1592585144194'
+  alias: tomomi_home
+  description: ''
+  trigger:
+  - above: '10'
+    entity_id: sensor.presence_tomomi_iphone
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      dev_id: tomomi_monitor
+      location_name: home
+      source_type: bluetooth
+    service: device_tracker.see
+- id: '1593296347730'
+  alias: Switch off humidifier when TV light switches off after dark
+  description: ''
+  trigger:
+  - entity_id: light.klein_lampje_bij_tv
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  action:
+  - data: {}
+    entity_id: fan.xiaomi_miio_device
+    service: fan.turn_off
+- id: '1593297250598'
+  alias: Switch on humidifier when espresso machine switches on
+  description: ''
+  trigger:
+  - entity_id: switch.espresso_machine_53
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: fan.xiaomi_miio_device
+    service: fan.turn_on
+- id: '1593297316676'
+  alias: Switch off humidifier when we leave the house
+  description: ''
+  trigger:
+  - below: '50'
+    entity_id: sensor.home_occupancy_confidence
+    platform: numeric_state
+  condition: []
+  action:
+  - data: {}
+    entity_id: fan.xiaomi_miio_device
+    service: fan.turn_off
+- id: '1593297511540'
+  alias: Switch on humidifier when we arrive home
+  description: ''
+  trigger:
+  - above: '80'
+    entity_id: sensor.home_occupancy_confidence
+    platform: numeric_state
+  condition: []
+  action:
+  - data: {}
+    entity_id: fan.xiaomi_miio_device
+    service: fan.turn_on
+- id: '1593297674621'
+  alias: Switch on downstairs lights when we arrive after dark
+  description: ''
+  trigger:
+  - above: '85'
+    entity_id: sensor.home_occupancy_confidence
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  action:
+  - device_id: 564c71ac117148ac9ae1a895579956c7
+    domain: light
+    entity_id: light.grote_lamp_bij_raam
+    type: turn_on
+  - device_id: fa11229bab194729875f095e353152d4
+    domain: light
+    entity_id: light.klein_lampje_bij_tv
+    type: turn_on
+  - device_id: 96e72f9ab22d4e94a1154ab25df990c4
+    domain: light
+    entity_id: light.klein_lampje_tafel
+    type: turn_on
