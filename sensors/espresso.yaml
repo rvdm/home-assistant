@@ -1,0 +1,6 @@
+- platform: template
+  sensors:
+     espressomachine_power:
+       friendly_name: "Espresso machine power"
+       unit_of_measurement: 'watts'
+       value_template: "{{ state_attr('switch.espresso_machine_53', 'current_power_w') }}"

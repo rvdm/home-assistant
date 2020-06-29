@@ -1,0 +1,6 @@
+- platform: template
+  sensors:
+     toon_temperature:
+       friendly_name: "Toon Temperature"
+       unit_of_measurement: 'degrees'
+       value_template: "{{ state_attr('climate.toon_thermostat', 'current_temperature') }}"
