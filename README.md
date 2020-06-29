@@ -1,6 +1,6 @@
 # rvdm's Home Assistant Configuration Files 
 
-![Project Maintenance][maintenance-shield]
+[![Project Maintenance][maintenance-shield]
 [![License][license-shield]](docs/LICENSE.md)
 
 [![GitHub Activity][commits-shield]][commits]
@@ -10,12 +10,12 @@
 ![GitHub Watchers][watchers-shield]
 ![GitHub Forks][forks-shield]
 
-## Physical Setup
+# Physical Setup
 
 I'm running my Home Assistant install using [Home Assistant Core](https://github.com/home-assistant/core) on a small Intel NUC machine in my utility closet.
 The NUC is connected and integrated in my home network and a mix of home automation hardware and software.
 
-# Hardware
+## Hardware
 
 - [Intel NUC NUC7i3BNK](https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc7i3bnk.html)
 I stuffed this with 16GB of RAM and a 512GB Western Digital NVME drive.
