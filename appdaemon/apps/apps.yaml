@@ -1,0 +1,15 @@
+---
+alarm_processor:
+  module: alarmprocessor
+  class: AlarmProcessor
+  sleep_sensor: light.rvdm_sleep_lights
+  waketime_sensor: light.rvdm_awake
+
+espresso:
+  module: espresso
+  class: Espresso
+  sleep_sensor: light.rvdm_sleep_lights
+  waketime_sensor: light.rvdm_awake
+  espresso_time: "12:15:00"
+  wfh_threshold: "07:00:00"
+  espresso_switch: switch.espresso_machine_53
