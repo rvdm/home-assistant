@@ -92,3 +92,44 @@ sonos:
   media_player:
     hosts:
       - !secret sonos_ip
+
+badnest:
+    issue_token: !secret badnest_issue_token
+    cookie: !secret badnest_cookie
+    region: eu
+
+binary_sensor:
+ - platform: workday
+   country: NL
+
+emulated_hue:
+  listen_port: 8088
+  advertise_ip: !secret hue_ip_address
+  advertise_port: 80
+
+wake_on_lan:
+
+webostv:
+  host: !secret lgtv_ip
+  #other settings
+  turn_on_action:
+    service: wake_on_lan.send_magic_packet
+    data:
+      mac: 58-fd-b1-92-02-4d
+      broadcast_address: 192.168.42.255
+
+light:
+  - platform: template
+    lights:
+      rvdm_sleep_lights:
+        friendly_name: "rvdm sensor sleep"
+        turn_on:
+        - service: input_select.select_option
+          data_template:
+            entity_id: input_select.rvdm_status_dropdown
+            option: 'Just Awake'
+        turn_off:
+        - service: input_select.select_option
+          data_template:
+            entity_id: input_select.rvdm_status_dropdown
+            option: 'Sleeping'

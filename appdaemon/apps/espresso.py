@@ -18,8 +18,11 @@ class Espresso(hass.Hass):
         # get espresso switch and time
         self.espresso_switch = self.args['espresso_switch']
         self.espresso_time = self.args['espresso_time']
-        self.wfh_threshold = self.parse_datetime(self.args['wfh_threshold'])
+        self.wfh_threshold = self.parse_datetime(self.args['wfh_threshold']).timestamp()
         self.log("Will use %s to switch on espresso machine at %s" % (self.espresso_switch, self.espresso_time))
+
+        if (self.get_state(self.waketime_sensor) is None):
+            self.set_state(self.waketime_sensor,state="Unknown")
 
         self.listen_state(self.alarm_event,self.sleep_sensor)
         self.run_daily(self.maybe_espresso,self.espresso_time)
@@ -31,17 +34,18 @@ class Espresso(hass.Hass):
         now = datetime.now()
         if (new == "on"):
             self.log("Wake-up triggered by alarm, switching %s to on" % self.espresso_switch)
-            self.set_state(self.espresso_switch, state="on")
+            self.turn_on(self.espresso_switch)
 
-    def maybe_espresso(self):
+    def maybe_espresso(self,kwargs):
         # decision time!
         # wake-up time before configured threshold? Probably not wfh today.
         self.waketime = self.get_state(self.waketime_sensor,attribute="changed")
+        waketime = self.convert_utc(self.waketime).timestamp()
         workday = self.get_state("binary_sensor.workday_sensor")
 
-        if (self.waketime < self.wfh_threshold):
+        if (waketime < self.wfh_threshold):
             self.log("Woke up too early, not switching on espresso machine")
         else:
             if (workday == "on"):
                 self.log("Time is right and we're working, switching on espresso machine")
-                self.set_state(self.espresso_switch, state="on")
+                self.turn_on(self.espresso_switch)

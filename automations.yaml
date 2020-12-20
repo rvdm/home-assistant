@@ -4,13 +4,14 @@
   trigger:
   - event_data:
       event: 1002
-      id: remote_button
+      id: tradfri_remote_control
     event_type: deconz_event
     platform: event
   condition: []
   action:
-  - entity_id: switch.wall_plug_at_desk_25
+  - entity_id: switch.fgwpe_f_wall_plug_kerstboom_switch_2
     service: switch.toggle
+  mode: single
 - id: '1578143746974'
   alias: Start HomeKit
   description: ''
@@ -73,36 +74,24 @@
   action:
   - entity_id: scene.toggle_bed_light_2
     service: scene.turn_on
-- id: '1578143746979'
-  alias: update_toon_temperature_sensor
-  description: trigger every 5 mins to update temp graphs
-  trigger:
-  - platform: time_pattern
-    minutes: /10
-  action:
-  - service: homeassistant.update_entity
-    entity_id: climate.toon_thermostat
 - id: '1592241024392'
   alias: fridge door open long
   description: ''
   trigger:
-  - device_id: 520b4c30d32e41269bc03fa52651512c
-    domain: binary_sensor
-    entity_id: binary_sensor.fridge_freezer_door
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 20
-    platform: device
-    type: opened
+  - entity_id: binary_sensor.fridge_freezer_door
+    for: 0:00:20
+    from: 'off'
+    platform: state
+    to: 'on'
   condition: []
   action:
   - data:
-      delay: 00:00:05
+      delay: 00:00:10
       message: De koelkast staat nog open!
       sonos_entity: media_player.beneden
       volume: 0.5
     service: script.sonos_say
+  mode: single
 - id: '1592584947804'
   alias: rvdm home
   description: ''
@@ -179,7 +168,7 @@
   alias: Switch on humidifier when espresso machine switches on
   description: ''
   trigger:
-  - entity_id: switch.espresso_machine_53
+  - entity_id: switch.espresso_machine_switch
     from: 'off'
     platform: state
     to: 'on'
@@ -188,6 +177,7 @@
   - data: {}
     entity_id: fan.xiaomi_miio_device
     service: fan.turn_on
+  mode: single
 - id: '1593297316676'
   alias: Switch off humidifier when we leave the house
   description: ''
@@ -236,3 +226,59 @@
     domain: light
     entity_id: light.klein_lampje_tafel
     type: turn_on
+- id: '1597531227645'
+  alias: kill standby stuff at night
+  description: ''
+  trigger:
+  - at: 03:00:00
+    platform: time
+  condition:
+  - condition: device
+    device_id: fa11229bab194729875f095e353152d4
+    domain: light
+    entity_id: light.klein_lampje_bij_tv
+    type: is_off
+  action:
+  - data: {}
+    entity_id: switch.stekkerblok_5_instance_4_subwoofer_switch
+    service: switch.turn_off
+  - service: switch.turn_off
+    data: {}
+    entity_id: switch.stekkerblok_2_instance_1_amplifier_switch
+  - service: switch.turn_off
+    data: {}
+    entity_id: switch.stekkerblok_5_instance_6_ps4_switch
+  mode: single
+- id: '1602339731666'
+  alias: Espresso on weekend/holiday
+  description: ''
+  trigger:
+  - platform: time
+    at: '11:00'
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
+  action:
+  - service: switch.turn_on
+    data: {}
+    entity_id: switch.espresso_machine_switch
+  mode: single
+- id: '1602687101279'
+  alias: Espresso machine almost empty
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.hx711_value_2
+    below: '2300'
+  condition: []
+  action:
+  - data:
+      delay: 00:00:03
+      message: De espresso machine heeft water nodig!
+      sonos_entity: media_player.beneden
+      volume: 0.5
+    service: script.sonos_say
+  mode: single

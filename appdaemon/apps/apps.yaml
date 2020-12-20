@@ -10,6 +10,6 @@ espresso:
   class: Espresso
   sleep_sensor: light.rvdm_sleep_lights
   waketime_sensor: light.rvdm_awake
-  espresso_time: "12:15:00"
+  espresso_time: "12:00:00"
   wfh_threshold: "07:00:00"
-  espresso_switch: switch.espresso_machine_53
+  espresso_switch: switch.espresso_machine_switch

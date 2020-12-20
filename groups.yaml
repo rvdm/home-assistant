@@ -1,8 +1,9 @@
 bedlights:
   name: bed lampjes
   entities:
-    - switch.bed_lamp_1_28
-    - switch.bed_lamp_2_31
+    - light.zuiver
+    - switch.stekkerblok_10_instance_2_light_right_switch_3
+    - switch.stekkerblok_10_instance_5_light_left_switch_3
 
 downstairslights:
   name: lampen beneden
@@ -10,10 +11,11 @@ downstairslights:
     - light.grote_lamp_bij_raam
     - light.klein_lampje_tafel
     - light.klein_lampje_bij_tv
+    - switch.fgwpe_f_wall_plug_kerstboom_switch_2
 
 avstuff:
   name: A/V equipment
   entities:
-    - switch.audio_1_tv_11
-    - switch.audio_1_amplifier_12
-    - switch.audio_1_subwoofer_14
+    - switch.stekkerblok_2_instance_1_amplifier_switch
+    - switch.stekkerblok_5_instance_6_ps4_switch
+    - switch.stekkerblok_5_instance_4_subwoofer_switch

@@ -3,4 +3,4 @@
      toon_temperature:
        friendly_name: "Toon Temperature"
        unit_of_measurement: 'degrees'
-       value_template: "{{ state_attr('climate.toon_thermostat', 'current_temperature') }}"
+       value_template: "{{ state_attr('climate.thermostat', 'current_temperature') }}"
