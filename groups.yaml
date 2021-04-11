@@ -11,7 +11,6 @@ downstairslights:
     - light.grote_lamp_bij_raam
     - light.klein_lampje_tafel
     - light.klein_lampje_bij_tv
-    - switch.fgwpe_f_wall_plug_kerstboom_switch_2
 
 avstuff:
   name: A/V equipment
