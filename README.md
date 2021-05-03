@@ -12,8 +12,8 @@ The NUC is connected and integrated in my home network and a mix of home automat
 - [Intel NUC NUC7i3BNK](https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc7i3bnk.html)
 I stuffed this with 16GB of RAM and a 512GB Western Digital NVME drive.
 - [Conbee II](https://phoscon.de/en/conbee2) USB stick for Zigbee connectivity
+- [Aeotec] (https://aeotec.com/z-wave-usb-stick/) Z-wave stick
 - [Eneco Toon](https://www.home-assistant.io/integrations/toon/) thermostat
-- An old Vera Lite Z-wave controller. It's end of life, but I still use it as a cheap z-wave integration for home-assistant. Should eventually be replaced by a Z-wave stick :)
 
 The above devices connect to a number of 'smart' devices in our home:
 - Quite a few [GreenWave Reality Smart PowerNodes](https://products.z-wavealliance.org/products/54). These are smart z-wave power blocks with 6 EU power plug connectors that each are switchable and measure power consumption. They're not great quality, but they work for now.
@@ -24,7 +24,9 @@ The above devices connect to a number of 'smart' devices in our home:
 - [Bosch fridge/freezer](https://www.bosch-home.nl/productoverzicht/KGN36HI32) with wifi and door-triggered cameras
 - [Siemens dishwasher](https://www.siemens-home.bsh-group.com/nl/productoverzicht/SN278I26TE) with wifi
 - [Roku Ultra](https://www.roku.com/products/roku-ultra) for media playing
+- [LG Oled 48CX TV] (https://www.lg.com/us/tvs/lg-oled48cxpub-oled-4k-tv)
 - [Ikea Symfonisk](https://www.ikea.com/nl/nl/p/symfonisk-wifi-boekenplankspeaker-zwart-50357554/) Sonos 'clone'
+- [Samsung WW80T754ABT washing machine](https://www.samsung.com/nl/washers-and-dryers/washing-machines/front-load-8kg-white-ww80t754abt-s2/)
 - Not really home automation, but the car reports metrics, GPS and status back via [Connected Drive](https://www.bmw-connecteddrive.nl/app/index.html#/portal)
 
 In the house devices are wired where possible, but lots of devices connect via wifi. The network is based all off Ubiquiti equipment:
