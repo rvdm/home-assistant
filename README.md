@@ -12,7 +12,7 @@ The NUC is connected and integrated in my home network and a mix of home automat
 - [Intel NUC NUC7i3BNK](https://www.intel.com/content/www/us/en/products/boards-kits/nuc/kits/nuc7i3bnk.html)
 I stuffed this with 16GB of RAM and a 512GB Western Digital NVME drive.
 - [Conbee II](https://phoscon.de/en/conbee2) USB stick for Zigbee connectivity
-- [Aeotec] (https://aeotec.com/z-wave-usb-stick/) Z-wave stick
+- [Aeotec](https://aeotec.com/z-wave-usb-stick/) Z-wave stick
 - [Eneco Toon](https://www.home-assistant.io/integrations/toon/) thermostat
 
 The above devices connect to a number of 'smart' devices in our home:
@@ -28,6 +28,7 @@ The above devices connect to a number of 'smart' devices in our home:
 - [Ikea Symfonisk](https://www.ikea.com/nl/nl/p/symfonisk-wifi-boekenplankspeaker-zwart-50357554/) Sonos 'clone'
 - [Samsung WW80T754ABT washing machine](https://www.samsung.com/nl/washers-and-dryers/washing-machines/front-load-8kg-white-ww80t754abt-s2/)
 - [Withings Cardio](https://www.withings.com/nl/en/body-cardio) smart scale
+- [Hue motion sensor](https://www.philips-hue.com/en-us/p/hue-motion-sensor/046677473389) as an experiment
 - Not really home automation, but the car reports metrics, GPS and status back via [Connected Drive](https://www.bmw-connecteddrive.nl/app/index.html#/portal)
 
 In the house devices are wired where possible, but lots of devices connect via wifi. The network is based all off Ubiquiti equipment:
@@ -47,3 +48,40 @@ This was installed using standard ELK docker-compose files that can be found [he
 
 After getting the base infrastructure in place, home-assistant was installed using the standard [Docker install instructions](https://www.home-assistant.io/docs/installation/docker/).
 
+In home-assistant I do a few things to automate - but there should be much more 'smartness' to it. Partially this is due to lack of sensors (and the inability of most sensors to ignore cats); the other bit that needs to be fixed is proper presence detection.
+
+Things I do do:
+- Switch off unneeded power at night. This saves more energy than I thought!
+
+
+- 'Night mode' triggers when I enable my alarm. 
+This works by using the 'sleep cycle' app which can connect to Hue devices. In home-assistant I have a 'fake hue' hub which pretends to be a light. 
+The light connected to that is a virtual light, which triggers some automation in appdaemon. The appdaemon script takes care of the following:
+- When I switch off the alarm in the morning, switch on the espresso machine, so it's warmed up when I exit the shower.
+- If it's a weekday and not a holiday, *and* I woke up after a certain time, I'm working from home, so the espresso machine gets switched on at 12 so I have a heated machine after lunch.
+
+On non-weekdays or holidays, the machine gets switched on at around 11 only.
+The appdaemon scripts and configs are in the apps/ section of this repo.
+
+
+
+- Some node-red automation around the lights upstairs. 
+I control these using Ikea wireless switches. I have two lights next to the bed, and one bigger light. These are switched on and off depending on state:
+- When the bed lights are off, and that side's button gets pushed, both bed lights and the big light switch on.
+- When the bed lights and the big lights are on, and one of the 'off' buttons gets pushed, that side's light switches off, along with the big light.
+- When only one light is on, and that side's 'off' button gets pushed, only that light switches off.
+
+This convuluted automation takes care of our before-sleeping routines :)
+
+
+
+- Some simple automation using light groups for switching off and on all of the 'media stuff' at the same time. 
+
+
+
+
+Todo:
+- Proper presence detection
+- Proper sensor automation (occupancy / movement)
+- More graphs and measurements around humidity and air quality
+- Some switches for lights that are not switchable yet. Replacing of physical wall switches by Shelly or the like.
