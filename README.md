@@ -24,9 +24,10 @@ The above devices connect to a number of 'smart' devices in our home:
 - [Bosch fridge/freezer](https://www.bosch-home.nl/productoverzicht/KGN36HI32) with wifi and door-triggered cameras
 - [Siemens dishwasher](https://www.siemens-home.bsh-group.com/nl/productoverzicht/SN278I26TE) with wifi
 - [Roku Ultra](https://www.roku.com/products/roku-ultra) for media playing
-- [LG Oled 48CX TV] (https://www.lg.com/us/tvs/lg-oled48cxpub-oled-4k-tv)
+- [LG Oled 48CX TV](https://www.lg.com/us/tvs/lg-oled48cxpub-oled-4k-tv)
 - [Ikea Symfonisk](https://www.ikea.com/nl/nl/p/symfonisk-wifi-boekenplankspeaker-zwart-50357554/) Sonos 'clone'
 - [Samsung WW80T754ABT washing machine](https://www.samsung.com/nl/washers-and-dryers/washing-machines/front-load-8kg-white-ww80t754abt-s2/)
+- [Withings Cardio](https://www.withings.com/nl/en/body-cardio) smart scale
 - Not really home automation, but the car reports metrics, GPS and status back via [Connected Drive](https://www.bmw-connecteddrive.nl/app/index.html#/portal)
 
 In the house devices are wired where possible, but lots of devices connect via wifi. The network is based all off Ubiquiti equipment:
