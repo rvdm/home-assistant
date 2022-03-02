@@ -1,16 +1,18 @@
 default_config:
-        
+
 homeassistant:
   customize: !include customize.yaml
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
 
 frontend:
   themes: !include_dir_merge_named themes
 
 logger:
   default: info
-  logs:
-    pydeconz: debug
-    homeassistant.components.deconz: debug
 
 # Text to speech; uses google translate to convert to mp3
 tts:
@@ -57,15 +59,19 @@ toon:
 
 # WiP: homekit config. very incomplete.
 homekit:
-  auto_start: false
   advertise_ip: !secret hassio_host_ip
-  filter:
-    include_entities:
-      - switch.raam_lamp_52
-      - switch.espresso_machine_53
-      - scene.a_v_off
-      - scene.a_v_on
-      - climate.toon_thermostat
+  filter: 
+        include_entities:
+          - light.grote_lamp_bij_raam
+          - light.klein_lampje_bij_tv
+          - light.klein_lampje_tafel
+          - light.zuiver
+          - switch.stekkerblok_10_instance_2_light_right_switch_3
+          - switch.stekkerblok_10_instance_5_light_left_switch_3
+          - switch.espresso_machine_switch
+          - climate.thermostat
+          - switch.stekkerblok_2_instance_1_amplifier_switch
+          - switch.stekkerblok_5_instance_4_subwoofer_switch
 
 # sync car status and location from the connecteddrive portal.
 bmw_connected_drive:
@@ -88,10 +94,10 @@ home_connect:
 #    name: onkyo
 
 # Xiaomi humidifier setup
-fan:
-  - platform: xiaomi_miio
-    host: !secret xiaomi_humidifier_ip
-    token: !secret xiaomi_humidifier_token
+#fan:
+#  - platform: xiaomi_miio
+#    host: !secret xiaomi_humidifier_ip
+#    token: !secret xiaomi_humidifier_token
 
 # sonos connection
 sonos:
@@ -99,30 +105,27 @@ sonos:
     hosts:
       - !secret sonos_ip
 
-badnest:
-    issue_token: !secret badnest_issue_token
-    cookie: !secret badnest_cookie
-    region: eu
+#badnest:
+#   issue_token: !secret badnest_issue_token
+#    cookie: !secret badnest_cookie
+#    region: eu
 
 binary_sensor:
  - platform: workday
    country: NL
 
 emulated_hue:
-  listen_port: 8088
+  listen_port: 4280
   advertise_ip: !secret hue_ip_address
+  host_ip: !secret hassio_host_ip
   advertise_port: 80
 
 wake_on_lan:
 
-webostv:
-  host: !secret lgtv_ip
-  #other settings
-  turn_on_action:
-    service: wake_on_lan.send_magic_packet
-    data:
-      mac: 58-fd-b1-92-02-4d
-      broadcast_address: 192.168.42.255
+withings:
+  client_id: 74aad65a7204bab1efcf0b1bf8d515fcd7890f04b9a2723f2fbfe732ffc8a2cd
+  client_secret: a58cfe93899e7283d49e05ba1c40414f30d70d79032f36b178de0e61387449d8
+  use_webhook: true
 
 light:
   - platform: template
@@ -139,3 +142,12 @@ light:
           data_template:
             entity_id: input_select.rvdm_status_dropdown
             option: 'Sleeping'
+
+utility_meter:
+        daily_power:
+                source: sensor.energy_usage_today
+                cycle: daily
+        daily_gas:
+                source: sensor.gas_usage_today
+                cycle: daily
+
