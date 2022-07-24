@@ -49,9 +49,6 @@ notify:
       vapid_prv_key: !secret notify_vapid_prv_key
       vapid_email: !secret notify_vapid_email
 
-# 'breaking changes' addon from HACS
-breaking_changes:
-
 # set up the toon integration. 
 toon:
   client_id: !secret toon_client_id
