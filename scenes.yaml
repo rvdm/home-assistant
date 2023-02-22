@@ -13,3 +13,11 @@
       node_id: 5
       friendly_name: 'Subwoofer: Switch'
       state: 'off'
+- id: '1660585047620'
+  name: Espressomachine on
+  entities:
+    switch.espresso_machine_switch:
+      friendly_name: Espresso machine switch
+      state: 'on'
+  icon: mdi:coffee
+  metadata: {}

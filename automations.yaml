@@ -9,14 +9,14 @@
     platform: event
   condition: []
   action:
-  - service: switch.toggle
-    data: {}
-    target:
-      device_id: f6669500966c783e6a53dac519b2955d
   - type: toggle
     device_id: 86f702776f6f66573bb05544b55075ad
     entity_id: humidifier.humidifier
     domain: humidifier
+  - type: toggle
+    device_id: d86d7c82ec0be311ca273f963775c640
+    entity_id: switch.shellyplug_s_e868e7c5781f
+    domain: switch
   mode: single
 - id: '1578143746974'
   alias: Start HomeKit
@@ -28,62 +28,6 @@
   action:
   - delay: 0:05
   - service: homekit.start
-- id: '1592584947804'
-  alias: rvdm home
-  description: ''
-  trigger:
-  - above: '10'
-    entity_id: sensor.presence_rvdm_iphone
-    platform: numeric_state
-  condition: []
-  action:
-  - data:
-      dev_id: rvdm_monitor
-      location_name: home
-      source_type: bluetooth
-    service: device_tracker.see
-- id: '1592585071436'
-  alias: rvdm not_home
-  description: ''
-  trigger:
-  - below: '10'
-    entity_id: sensor.presence_rvdm_iphone
-    platform: numeric_state
-  condition: []
-  action:
-  - data:
-      dev_id: rvdm_monitor
-      location_name: not_home
-      source_type: bluetooth
-    service: device_tracker.see
-- id: '1592585112814'
-  alias: tomomi_not_home
-  description: ''
-  trigger:
-  - below: '10'
-    entity_id: sensor.presence_tomomi_iphone
-    platform: numeric_state
-  condition: []
-  action:
-  - data:
-      dev_id: tomomi_monitor
-      location_name: not_home
-      source_type: bluetooth
-    service: device_tracker.see
-- id: '1592585144194'
-  alias: tomomi_home
-  description: ''
-  trigger:
-  - above: '10'
-    entity_id: sensor.presence_tomomi_iphone
-    platform: numeric_state
-  condition: []
-  action:
-  - data:
-      dev_id: tomomi_monitor
-      location_name: home
-      source_type: bluetooth
-    service: device_tracker.see
 - id: '1593296347730'
   alias: Switch off humidifier when TV light switches off after dark
   description: ''
@@ -202,4 +146,92 @@
     data:
       title: Espresso machine has no water!
       message: Espresso machine has no water!
+  mode: single
+- id: '1660249755304'
+  alias: switch off fan at night
+  description: ''
+  trigger:
+  - platform: time
+    at: input_datetime.shut_off_fan_at_night
+  condition: []
+  action:
+  - type: turn_off
+    device_id: d86d7c82ec0be311ca273f963775c640
+    entity_id: switch.shellyplug_s_e868e7c5781f
+    domain: switch
+  mode: single
+- id: '1664478197364'
+  alias: action espresso machine on
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: espresso machine on
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 58a3f77bb18d6e385ee8936633df1aa0
+    entity_id: switch.espresso_machine_switch
+    domain: switch
+  mode: single
+- id: '1664478233109'
+  alias: action espresso machine off
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: espresso machine off
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 58a3f77bb18d6e385ee8936633df1aa0
+    entity_id: switch.espresso_machine_switch
+    domain: switch
+  mode: single
+- id: '1664478553109'
+  alias: action a/v on
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: a/v on
+  condition: []
+  action:
+  - service: homeassistant.turn_on
+    data: {}
+    target:
+      entity_id: group.avstuff
+  mode: single
+- id: '1664478596991'
+  alias: action a/v off
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: a/v off
+  condition: []
+  action:
+  - service: homeassistant.turn_off
+    data: {}
+    target:
+      entity_id: group.avstuff
+  mode: single
+- id: '1664478647915'
+  alias: action toggle bed lights
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: toggle bed lights
+  condition: []
+  action:
+  - service: homeassistant.toggle
+    data: {}
+    target:
+      entity_id: group.bedlights
   mode: single

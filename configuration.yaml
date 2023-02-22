@@ -148,3 +148,48 @@ utility_meter:
                 source: sensor.gas_usage_today
                 cycle: daily
 
+mqtt:
+  sensor:
+          - name: 'Day-ahead-price'
+            unit_of_measurement: "€"
+            state_topic: enstoe/day-ahead
+            value_template: '{{ value_json.day_ahead_price }}'
+            json_attributes_topic: enstoe/day-ahead
+
+template:
+  - sensor:
+      - name: "Day_Ahead_Avg_Price"
+        device_class: monetary
+        unit_of_measurement: €
+        state: >
+          {{ state_attr ('sensor.day_ahead_price', 'avg_price')}}  
+  - sensor:
+      - name: "Day_Ahead_Current_Price"
+        #device_class: monetary
+        unit_of_measurement: €/kWh
+        state: >
+          {{ state_attr ('sensor.day_ahead_price', 'day_ahead_price')}}
+  - sensor:
+      - name: "Day_Ahead_Min_Price"
+        device_class: monetary
+        unit_of_measurement: €
+        state: >
+          {{ state_attr ('sensor.day_ahead_price', 'min_price')}}
+  - sensor:
+      - name: "Day_Ahead_Max_Price"
+        device_class: monetary
+        unit_of_measurement: €
+        state: >
+          {{ state_attr ('sensor.day_ahead_price', 'max_price')}}
+  - sensor:
+      - name: "Day_Ahead_Lowerband_Price"
+        device_class: monetary
+        unit_of_measurement: €
+        state: >
+          {{ (1-(states ('input_number.ess_price_lower_band')) | int / 100) * (states ('sensor.day_ahead_avg_price') | float ) }}
+  - sensor:
+      - name: "Day_Ahead_Upperband_Price"
+        device_class: monetary
+        unit_of_measurement: €
+        state: >
+          {{ (1+(states ('input_number.ess_price_upper_band')) | int / 100) * (states ('sensor.day_ahead_avg_price') | float )}}        
