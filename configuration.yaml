@@ -1,5 +1,8 @@
 default_config:
 
+lovelace:
+  mode: storage
+
 homeassistant:
   customize: !include customize.yaml
 
@@ -7,6 +10,12 @@ http:
   use_x_forwarded_for: true
   trusted_proxies:
     - 172.30.33.0/24
+  cors_allowed_origins:
+    - https://unpkg.com
+    - https://unpkg.com/lit-html@1/directives/style-map.js?module
+    - https://unpkg.com/lit-html@1/directives/if-defined?module
+    - https://unpkg.com/lit-html@%5E1.0.0?module
+    - https://unpkg.com/lit-html@1/directives/style-map.js?module
 
 frontend:
   themes: !include_dir_merge_named themes
@@ -48,11 +57,6 @@ notify:
       vapid_pub_key: !secret notify_vapid_pub_key
       vapid_prv_key: !secret notify_vapid_prv_key
       vapid_email: !secret notify_vapid_email
-
-# set up the toon integration. 
-toon:
-  client_id: !secret toon_client_id
-  client_secret: !secret toon_client_secret
 
 # WiP: homekit config. very incomplete.
 homekit:
@@ -136,10 +140,11 @@ emulated_hue:
 
 wake_on_lan:
 
-withings:
-  client_id: !secret withings_client_id
-  client_secret: !secret withings_client_secret
-  use_webhook: true
+# deprecated 20-10
+#withings:
+#  client_id: !secret withings_client_id
+#  client_secret: !secret withings_client_secret
+#  use_webhook: true
 
 light:
   - platform: template
@@ -233,3 +238,32 @@ rest_command:
   reboot_p1_dongle:
     url: 192.168.43.68/ReBoot
     method: get
+
+powercalc:
+
+ramses_cc:
+  serial_port: /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A50285BI-if00-port0
+  packet_log:
+    file_name: packet.log
+    rotate_backups: 28
+  restore_cache: true
+  scan_interval: 60
+  01:010995:
+    system: 
+      appliance_control: 10:058452
+    zones:
+      "00": { _name: "Keuken", sensor: 34:074351, actuators: [ 04:122018 ] }
+      "01": { _name: "Roba kamer", sensor: 04:122022, actuators: [ 04:122022 ] }
+      "02": { _name: "Nekomo kamer", sensor: 04:122020, actuators: [ 04:122020 ] }
+  known_list:
+    01:010995: # system
+    10:058452: # opentherm gw
+    34:074351: # sensor keuken
+    04:122018: # actuator keuken
+    04:122022: # sensor roba kamer
+    04:122022: # actuator roba kamer
+    04:122020: # sensor nekomo kamer
+    04:122020: # actuator nekomo kamer
+    18:262143: # evofw3
+  ramses_rf:
+    enforce_known_list: true

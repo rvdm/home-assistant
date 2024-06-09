@@ -36,7 +36,13 @@
     event_type: ios.action_fired
     event_data:
       actionName: espresso machine on
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.roba_away
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.holiday
+    state: 'off'
   action:
   - type: turn_on
     device_id: 8af4e7817d94eff591c631230ce2d848
@@ -87,6 +93,12 @@
     entity_id: 6d268a5b3723993d35376b0850f2a986
     domain: sensor
     above: 5
+  - condition: state
+    entity_id: input_boolean.roba_away
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.holiday
+    state: 'off'
   action:
   - type: turn_on
     device_id: 7c7145ccb6e10ad91744a0b80af2136e
@@ -127,4 +139,180 @@
     device_id: 7c7145ccb6e10ad91744a0b80af2136e
     entity_id: 6782b2ac42f4ab812c7ecd02804dd596
     domain: light
+  mode: single
+- id: '1698610134162'
+  alias: Light on when motion detected front
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 749dbd91180c020a1ef93428afb2d986
+    entity_id: f87ea9f55a9ed3bfb516d56c4e9e3a5f
+    domain: binary_sensor
+  condition:
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    below: 10
+  - condition: device
+    type: is_off
+    device_id: 14b6dc81367208a601a1258f3d28ac56
+    entity_id: 9e979df4e12d75e1c6ffd37c1f8be69f
+    domain: light
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.voortuin_lampen
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.voortuin_lampen
+  mode: single
+- id: '1699180710962'
+  alias: Midnight runner
+  description: ''
+  trigger:
+  - platform: time
+    at: 00:00:00
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.voortuin_lampen
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.achtertuin_lampen
+  mode: single
+- id: '1699181020617'
+  alias: Lampen aan bij thuiskomst
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: device_tracker.i4_m50
+    zone: zone.home
+    event: enter
+  condition:
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    below: 10
+  - condition: device
+    type: is_off
+    device_id: 14b6dc81367208a601a1258f3d28ac56
+    entity_id: 9e979df4e12d75e1c6ffd37c1f8be69f
+    domain: light
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.voortuin_lampen
+  - delay:
+      hours: 0
+      minutes: 20
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.voortuin_lampen
+  mode: single
+- id: '1699640023583'
+  alias: set work from leaseweb
+  description: ''
+  trigger:
+  - platform: calendar
+    event: start
+    offset: 0:0:0
+    entity_id: calendar.roba
+  condition:
+  - condition: template
+    value_template: '{{ ''leaseweb'' in trigger.calendar_event.summary }}'
+  action:
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+  - service: input_text.set_value
+    data:
+      value: leaseweb
+    target:
+      entity_id: input_text.roba_work_location
+  mode: single
+- id: '1699640173462'
+  alias: set work from home
+  description: ''
+  trigger:
+  - platform: calendar
+    event: end
+    offset: 0:0:0
+    entity_id: calendar.roba
+  condition:
+  - condition: template
+    value_template: '{{ ''leaseweb'' in trigger.calendar_event.summary }}'
+  action:
+  - service: input_text.set_value
+    data:
+      value: home
+    target:
+      entity_id: input_text.roba_work_location
+  mode: single
+- id: '1699645097339'
+  alias: working from lsw
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:00:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: 'on'
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: input_text.roba_work_location
+      state: leaseweb
+  action:
+  - type: turn_on
+    device_id: 8af4e7817d94eff591c631230ce2d848
+    entity_id: 9d363e1e21c885b1cae22215d3872b1d
+    domain: switch
+  - type: turn_on
+    device_id: 36094b5e275d3e95d9cc969ec3f52237
+    entity_id: 624acd1e3294cfa48b56885dca71ac8f
+    domain: switch
+  mode: single
+- id: '1699645254109'
+  alias: working from home
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:30:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: 'on'
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: input_text.roba_work_location
+      state: home
+  action:
+  - type: turn_on
+    device_id: 8af4e7817d94eff591c631230ce2d848
+    entity_id: 9d363e1e21c885b1cae22215d3872b1d
+    domain: switch
+  - service: evohome.set_zone_override
+    data:
+      entity_id: climate.roba_kamer
+      setpoint: 20.5
+      duration: 0
   mode: single
